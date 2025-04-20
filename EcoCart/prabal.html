@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eco-Friendly Products</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: #278a00;
+      color: white;
+      height: 60px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+    }
+
+    .navbar-content {
+      width: 100%;
+      max-width: 1140px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .navbar-brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+
+    .cart-btn, #searchToggle {
+      background: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    
+    
+
+    #searchBarContainer {
+      display: none;
+      padding: 20px;
+      background-color: #f1f1f1;
+      position: relative;
+      z-index: 9;
+      margin-top: 60px;
+    }
+
+    main {
+      padding: 40px 20px 100px;
+      background-color: #f8f9fa;
+    }
+
+    .product-card {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+
+    .stars { font-size: 0.9rem; color: #4caf50; margin-bottom: 6px; }
+    .price { font-size: 15px; margin-bottom: 8px; }
+
+    .eco-badge {
+      font-size: 12px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      color: #fff;
+    }
+
+    .eco-high { background-color: #28a745; }
+    .eco-medium { background-color: #ffc107; color: #000; }
+    .eco-low { background-color: #dc3545; }
+
+    footer {
+      background-color: #278a00;
+      color: white;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+    }
+
+    .scroll-buttons {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 999;
+    }
+
+    .scroll-btn {
+      background-color: #278a00;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .scroll-btn:hover {
+      background-color: #1c6500;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .navbar,
+    .dark-mode footer {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .product-card {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.08);
+    }
+
+    .dark-mode .eco-badge.eco-medium {
+      color: #000;
+    }
+
+    .dark-mode .form-select,
+    .dark-mode .form-control,
+    .dark-mode .btn {
+      background-color: #2e2e2e;
+      color: #fff;
+      border-color: #444;
+    }
+
+    .dark-mode #searchBarContainer {
+      background-color: #222;
+    }
+
+    @media (max-width: 768px) {
+      .about-card {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-content">
+    <div></div>
+    <a class="navbar-brand" href="#">Eco Cart Sustainable Assistant</a>
+    <div class="d-flex align-items-center">
+      <button class="btn btn-light me-2" onclick="window.location.href='about.html'">About Us</button>
+      <button class="btn btn-light me-2" id="searchToggle">🔍</button>
+      <button class="btn btn-light me-2" onclick="window.location.href='cart.html'">🛒</button>
+      <button class="btn btn-light me-2" onclick="window.location.href='login.html'"><i class="fas fa-user-circle fa-lg"></i> </button>      
+    </div>  
+  </div>
+</nav>
+
+<div id="searchBarContainer" class="text-center">
+  <script async src="https://cse.google.com/cse.js?cx=9133dc39e6a794124"></script>
+  <div class="gcse-search"></div>
+  <div class="mt-3 mb-3 d-flex justify-content-center align-items-center gap-2">
+    <button class="btn btn-outline-dark" id="modeToggle"><i class="fas fa-moon"></i></button>
+    <input type="text" id="localSearchInput" class="form-control w-75" placeholder="Search products...">
+  </div>
+</div>
+
+<main class="pt-5 mt-5">
+  <div class="container">
+    <div class="text-center">
+      <select id="ecoFilter" class="form-select w-25 mx-auto mb-4">
+        <option value="all">All Eco Ratings</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+    </div>
+
+    <div class="row" id="productContainer"></div>
+    <button class="btn btn-outline-success d-block mx-auto mt-3" id="showMoreBtn">Show More</button>
+  </div>
+</main>
+
+<footer>
+  EcoCart © 2025
+</footer>
+
+<!-- Overlay -->
+<div id="overlay" onclick="closeDetails()" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 999;
+"></div>
+
+<!-- Details Panel (Should appear *above* overlay) -->
+<div id="detailsPanel" style="
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100%;
+  background-color: #fff;
+  z-index: 1000;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  overflow-y: auto;
+  transition: right 0.3s ease;
+">
+  <h3 id="detailsTitle"></h3>
+  <img id="detailsImage" src="" alt="Product Image" style="width: 100%; max-height: 200px; object-fit: cover; margin-bottom: 10px;">
+  <p><strong>Brand:</strong> <span id="detailsBrand"></span></p>
+  <p><strong>Price:</strong> $<span id="detailsPrice"></span></p>
+  <p><strong>Eco Rating:</strong> <span id="detailsEco"></span></p>
+  <p><strong>Greener Alternative:</strong> <span id="detailsAlt"></span></p>
+  <button onclick="closeDetails()" class="btn btn-danger mt-3 w-100">Close</button>
+</div>
+
+<button id="chatToggleBtn" class="btn btn-success" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 50%; width: 50px; height: 50px;">
+  💬
+</button>
+
+<!-- PHP-based Chatbot UI -->
+<div id="chatContainer" class="chatbox bg-white border p-3 shadow" style="position: fixed; bottom: 80px; right: 20px; width: 300px; z-index: 999; border-radius: 10px; display: none;">
+  <h5 class="text-success mb-2">EcoCart Assistant</h5>
+  <div id="chatLog" style="height: 180px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 6px; font-size: 14px; margin-bottom: 10px;">
+    <div class="text-muted small">Hi there! Ask me anything about our eco-friendly products 🌱</div>
+  </div>
+  <form id="chatForm">
+    <div class="input-group">
+      <input type="text" id="userInput" class="form-control" placeholder="Type your question..." required />
+      <button class="btn btn-success" type="submit">Send</button>
+    </div>
+  </form>
+</div>
+
+
+<div class="scroll-buttons">
+  <button id="scrollTopBtn" class="scroll-btn"><i class="fas fa-arrow-up"></i></button>
+  <button id="scrollBottomBtn" class="scroll-btn"><i class="fas fa-arrow-down"></i></button>
+</div>
+
+<script>
+ const cart = [];
+  const products = [
+    { name: "Ecofriendly Houseware", brand: "GreenLiving", image: "images/12.jpg", price: 682.24, rating: "★★★★☆", ecoRating: "high", alternative: "Metal-free Compostable Utensils" },
+    { name: "Plastic Toothbrush", brand: "GenericCo", image: "images/111.jpg", price: 213, rating: "★★☆☆☆", ecoRating: "low", alternative: "Bamboo Toothbrush" },
+    { name: "Reusable Metal Straw", brand: "SipSmart", image: "images/222.jpg", price: 256, rating: "★★★☆☆", ecoRating: "medium", alternative: "Bamboo Straw" },
+    { name: "Recycled Notebook", brand: "EcoWrite", image: "images/8.jpg", price: 405, rating: "★★★★☆", ecoRating: "high", alternative: "Digital Notes App" },
+    { name: "Reusable Coffee Cup", brand: "BrandX", image: "images/3.jpg", price: 169, rating: "★☆☆☆☆", ecoRating: "low", alternative: "Steel Water Bottle" },
+    { name: "Biodegradable Trash Bags", brand: "EarthCare", image: "images/7.jpg", price: 444, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Hemp Backpack", brand: "EarthCare", image: "images/4.jpg", price: 468, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Coconut Oil", brand: "EarthCare", image: "images/5.jpg", price: 468, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Compostable Phone Case", brand: "EarthCare", image: "images/6.jpg", price: 300, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Natural Honey", brand: "EarthCare", image: "images/9.jpg", price: 356, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Kasoori Majal", brand: "EarthCare", image: "images/10.jpg", price: 600, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Natural Soap", brand: "EarthCare", image: "images/11.jpg", price: 560, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Plastic water bottel", brand: "EarthCare", image: "images/13.jpg", price: 449, rating: "★★☆☆☆", ecoRating: "low", alternative: "Compost Bin" },
+    { name: "Jute bags", brand: "EarthCare", image: "images/14.jpg", price: 549, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Ethical and sustainable shoes", brand: "EarthCare", image: "images/15.jpg", price: 640, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Eco friendlyT-shirts", brand: "EarthCare", image: "images/16.jpg", price: 729, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+    { name: "Perfume brands", brand: "EarthCare", image: "images/17.jpg", price: 333, rating: "★★★☆☆", ecoRating: "medium", alternative: "Compost Bin" },
+    { name: "Sustainable and organic snacks", brand: "EarthCare", image: "images/18.jpg", price: 549, rating: "★★★★☆", ecoRating: "high", alternative: "Compost Bin" },
+  ];
+
+  let showAll = false;
+  let filteredProducts = [...products];
+
+  function getEcoBadge(rating) {
+    if (rating === "high") return '<span class="eco-badge eco-high">Eco Rating: High</span>';
+    if (rating === "medium") return '<span class="eco-badge eco-medium">Eco Rating: Medium</span>';
+    return '<span class="eco-badge eco-low">Eco Rating: Low</span>';
+  }
+
+  function renderProducts(productList = filteredProducts) {
+    const container = document.getElementById("productContainer");
+    container.innerHTML = "";
+
+    const visible = showAll ? productList : productList.slice(0, 6);
+    visible.forEach((p, index) => {
+      container.innerHTML += `
+        <div class="col-md-4 mb-4">
+          <div class="product-card h-100">
+            <img src="${p.image}" alt="${p.name}" class="img-fluid mb-2 rounded">
+            <h5>${p.name}</h5>
+            <p><strong>Brand:</strong> ${p.brand}</p>
+            <div class="stars">${p.rating}</div>
+            <div>${getEcoBadge(p.ecoRating)}</div>
+            <div class="price"><strong>Price:</strong> ₹${p.price.toFixed(2)}</div>
+            <p><strong>Greener Alternative:</strong> ${p.alternative}</p>
+            <button class="btn btn-success w-100 add-to-cart" data-index="${index}">Add to Cart</button>
+            <button class="btn btn-outline-secondary w-100 show-details mt-2" data-index="${index}">Show More Details</button>
+          </div>
+        </div>
+      `;
+    });
+
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.onclick = () => {
+        const product = visible[button.dataset.index];
+        const existing = JSON.parse(localStorage.getItem("cartItems")) || [];
+        if (!existing.some(item => item.name === product.name)) {
+          existing.push(product);
+          localStorage.setItem("cartItems", JSON.stringify(existing));
+          alert("Added to cart!");
+        } else {
+          alert("Product already in cart!");
+        }
+      };
+    });
+
+              // Show details when "Show More Details" button is clicked
+              document.querySelectorAll('.show-details').forEach(button => {
+    button.addEventListener('click', event => {
+      const index = event.target.getAttribute('data-index');
+      const product = productList[index];
+
+      document.getElementById('detailsTitle').textContent = product.name;
+      document.getElementById('detailsImage').src = product.image;
+      document.getElementById('detailsBrand').textContent = product.brand;
+      document.getElementById('detailsPrice').textContent = product.price.toFixed(2);
+      document.getElementById('detailsEco').textContent = product.ecoRating;
+      document.getElementById('detailsAlt').textContent = product.alternative;
+
+      document.getElementById('detailsPanel').style.right = '0';
+      document.getElementById('overlay').style.display = 'block'; // Show the overlay
+    });
+  });
+
+
+    const showMoreBtn = document.getElementById("showMoreBtn");
+    showMoreBtn.style.display = productList.length > 6 ? "block" : "none";
+    showMoreBtn.textContent = showAll ? "Show Less" : "Show More";
+  }
+
+  document.getElementById("searchToggle").onclick = () => {
+    const searchBar = document.getElementById("searchBarContainer");
+    searchBar.style.display = searchBar.style.display === "none" ? "block" : "none";
+  };
+
+  document.getElementById("showMoreBtn").onclick = () => {
+    showAll = !showAll;
+    renderProducts();
+  };
+
+  renderProducts();
+
+  function closeDetails() {
+  document.getElementById('detailsPanel').style.right = '-400px';
+  document.getElementById('overlay').style.display = 'none'; // Hide the overlay
+}
+
+
+  document.getElementById("localSearchInput").oninput = function () {
+    const term = this.value.toLowerCase();
+    filteredProducts = products.filter(p =>
+      p.name.toLowerCase().includes(term) || p.brand.toLowerCase().includes(term)
+    );
+    showAll = false;
+    renderProducts();
+  };
+
+  document.getElementById("ecoFilter").onchange = function () {
+    const selected = this.value;
+    filteredProducts = selected === "all"
+      ? [...products]
+      : products.filter(p => p.ecoRating === selected);
+    showAll = false;
+    renderProducts();
+  };
+
+  const modeToggle = document.getElementById("modeToggle");
+  modeToggle.onclick = () => {
+    document.body.classList.toggle("dark-mode");
+    const isDark = document.body.classList.contains("dark-mode");
+    localStorage.setItem("ecoDarkMode", isDark);
+    modeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  };
+
+  document.getElementById("scrollTopBtn").onclick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  document.getElementById("scrollBottomBtn").onclick = () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const isDark = localStorage.getItem("ecoDarkMode") === "true";
+    if (isDark) {
+      document.body.classList.add("dark-mode");
+      modeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    renderProducts();
+  });
+
+  document.getElementById('chatToggleBtn').addEventListener('click', () => {
+    const chat = document.getElementById('chatContainer');
+    chat.style.display = (chat.style.display === 'none' || chat.style.display === '') ? 'block' : 'none';
+  });
+
+  document.getElementById('chatForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const input = document.getElementById('userInput');
+    const userMsg = input.value.trim();
+    if (!userMsg) return;
+    input.value = '';
+    sendMessageToBot(userMsg);
+  });
+
+  function sendMessageToBot(userMsg) {
+    const chatLog = document.getElementById('chatLog');
+    chatLog.innerHTML += `<div><strong>You:</strong> ${userMsg}</div>`;
+
+    // Typing indicator
+    chatLog.innerHTML += `<div id="typing"><em>Bot is typing...</em></div>`;
+    chatLog.scrollTop = chatLog.scrollHeight;
+
+    const normalized = userMsg.toLowerCase();
+
+    // Predefined responses for common questions
+    const commonResponses = {
+        "do you have bamboo toothbrushes?": "Yes! We offer eco-friendly bamboo toothbrushes made from biodegradable materials. 🌱🪥 They're priced at $4.99 each and come with a 30-day satisfaction guarantee.",
+        "what's the price of a metal straw?": "Our reusable metal straws are priced at Rs 3.00. They come with a cleaning brush and a carrying pouch. Perfect for reducing single-use plastic! 🥤",
+        "how do i place an order?": "Placing an order is easy! Simply: \n1. Browse our products\n2. Add items to your cart\n3. Click the cart icon\n4. Fill in your details\n5. Complete the payment\nNeed more help? Just ask! 🛒",
+        "can i return a product?": "Yes, we have a 30-day return policy! If you're not satisfied with your purchase, you can return unused items in their original packaging for a full refund. Shipping costs for returns are covered by us! 📦",
+        "are your products biodegradable?": "Many of our products are biodegradable! We clearly mark each product with an eco-rating (High/Medium/Low) to help you make environmentally conscious choices. Products with 'High' eco-ratings are typically biodegradable. 🌱",
+        "what is ecocart?": "EcoCart is your one-stop shop for sustainable and eco-friendly products! We're committed to providing environmentally conscious alternatives to everyday items, helping you reduce your carbon footprint one purchase at a time. 🌍"
+    };
+
+    // Check for bamboo toothbrush questions (keeping existing logic)
+    const bambooQuestions = [
+        "do you have bamboo toothbrush?",
+        "do you have bamboo toothbrushes?",
+        "can i buy bamboo toothbrush?",
+        "do you sell bamboo toothbrush?",
+        "bamboo toothbrush available?",
+        "is bamboo toothbrush in stock?",
+    ];
+
+    if (bambooQuestions.includes(normalized)) {
+        setTimeout(() => {
+            document.getElementById('typing')?.remove();
+            chatLog.innerHTML += `<div><strong>Bot:</strong> Yes! We offer eco-friendly bamboo toothbrushes made from biodegradable materials. 🌱🪥<br>You can check them out in our <a href="products.html#bamboo-toothbrush" target="_blank">product section here</a>.</div>`;
+            showQuestions();
+            chatLog.scrollTop = chatLog.scrollHeight;
+            askFeedback(userMsg);
+        }, 800);
+        return;
+    }
+
+    // Check for predefined responses
+    if (commonResponses[normalized]) {
+        setTimeout(() => {
+            document.getElementById('typing')?.remove();
+            chatLog.innerHTML += `<div><strong>Bot:</strong> ${commonResponses[normalized]}</div>`;
+            showQuestions();
+            chatLog.scrollTop = chatLog.scrollHeight;
+            askFeedback(userMsg);
+        }, 800);
+        return;
+    }
+
+    // If not matched, proceed with existing PHP backend logic
+    fetch('bot.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `message=${encodeURIComponent(userMsg)}&username=Guest`
+    })
+    .then(res => res.text())
+    .then(botReply => {
+        document.getElementById('typing')?.remove();
+        chatLog.innerHTML += `<div><strong>Bot:</strong> ${botReply}</div>`;
+        chatLog.scrollTop = chatLog.scrollHeight;
+
+        if (["hi", "hello", "hii"].includes(normalized)) {
+            showQuestions();
+        } else {
+            showQuestions(true); // Show questions in compact form
+        }
+
+        askFeedback(userMsg);
+    });
+}
+
+// New function to show questions
+function showQuestions(compact = false) {
+    const chatLog = document.getElementById('chatLog');
+    const questions = [
+        "Do you have bamboo toothbrushes?",
+        "What's the price of a metal straw?",
+        "How do I place an order?",
+        "Can I return a product?",
+        "Are your products biodegradable?",
+        "What is EcoCart?"
+    ];
+
+    if (compact) {
+        chatLog.innerHTML += `<div><strong>Bot:</strong> You can also ask about: 
+            <div class="d-flex flex-wrap gap-1 mt-1">
+                ${questions.map(q => `<button class="btn btn-outline-success btn-sm common-question" data-q="${q}">${q}</button>`).join('')}
+            </div>
+        </div>`;
+    } else {
+        chatLog.innerHTML += "<div><strong>Bot:</strong> Here are some common questions you can ask:</div>";
+        questions.forEach(q => {
+            chatLog.innerHTML += `<div><button class="btn btn-outline-success btn-sm mt-1 common-question" data-q="${q}">${q}</button></div>`;
+        });
+    }
+
+    document.querySelectorAll('.common-question').forEach(button => {
+        button.addEventListener('click', function() {
+            const clickedQ = this.getAttribute('data-q');
+            sendMessageToBot(clickedQ);
+        });
+    });
+}
+</script>
+</body>
+</html>

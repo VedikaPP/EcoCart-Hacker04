@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment - EcoCart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #f2fdf2;
+      padding: 30px;
+    }
+    .card {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .upi-field {
+      margin-top: 20px;
+    }
+    .rating-stars {
+      margin-top: 15px;
+      font-size: 1.5rem;
+    }
+    .rating-stars i {
+      cursor: pointer;
+      color: gray;
+    }
+    .rating-stars i.selected {
+      color: gold;
+    }
+    /* Popup styling */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(5px);
+      background-color: rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .popup-box {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      position: relative;
+      animation: fadeIn 0.5s ease-in-out;
+      max-width: 400px;
+      text-align: center;
+    }
+    .popup-box h4 {
+      margin: 0;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      color: #888;
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .d-none { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="card text-center">
+    <h3>Confirm Your Payment</h3>
+    <div id="productDetails" class="mt-3"></div>
+
+    <div class="upi-field">
+      <label for="upiInput" class="form-label">Enter UPI ID:</label>
+      <input type="text" class="form-control" id="upiInput" placeholder="e.g. name@upi">
+    </div>
+
+    <button id="submitPaymentBtn" class="btn btn-success mt-3">Submit Payment</button>
+
+    <div id="successMessage" class="mt-4 text-success fw-bold d-none">
+      🎉 Product Purchased Successfully!
+    </div>
+
+    <div id="ratingSection" class="d-none mt-3">
+      <p>Rate this product:</p>
+      <div class="rating-stars" id="starContainer">
+        <i class="bi bi-star" data-value="1"></i>
+        <i class="bi bi-star" data-value="2"></i>
+        <i class="bi bi-star" data-value="3"></i>
+        <i class="bi bi-star" data-value="4"></i>
+        <i class="bi bi-star" data-value="5"></i>
+      </div>
+    </div>
+
+    <a href="prabal.html" class="btn btn-primary mt-4 d-none" id="backBtn">Back to Products</a>
+  </div>
+
+  <!-- Thank You Popup -->
+  <div id="thankYouPopup" class="popup-overlay d-none">
+    <div class="popup-box">
+      <span class="close-btn">&times;</span>
+      <h4>🎉 Thank you for your feedback!</h4>
+    </div>
+  </div>
+
+  <script>
+    const selectedProduct = JSON.parse(localStorage.getItem("selectedProduct"));
+    const buyAll = localStorage.getItem("buyAll") === "true";
+    const productDetails = document.getElementById("productDetails");
+
+    if (buyAll) {
+      const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+      let total = cart.reduce((sum, item) => sum + item.price, 0);
+      productDetails.innerHTML = `
+        <p>You are buying <strong>all items</strong> in your cart.</p>
+        <p>Total Amount: <strong>₹${total.toFixed(2)}</strong></p>`;
+    } else if (selectedProduct) {
+      productDetails.innerHTML = `
+        <p><strong>Product:</strong> ${selectedProduct.name}</p>
+        <p><strong>Price:</strong> ₹${selectedProduct.price.toFixed(2)}</p>`;
+    } else {
+      productDetails.innerHTML = `<p class="text-danger">No product selected.</p>`;
+    }
+
+    function isValidUPI(upi) {
+      const upiRegex = /^[\w.-]+@[\w.-]+$/;
+      return upiRegex.test(upi);
+    }
+
+    document.getElementById("submitPaymentBtn").addEventListener("click", () => {
+      const upi = document.getElementById("upiInput").value.trim();
+      if (!upi) {
+        alert("Please enter a UPI ID to proceed.");
+        return;
+      }
+      if (!isValidUPI(upi)) {
+        alert("Invalid UPI ID. Please enter a valid UPI address like name@bank.");
+        return;
+      }
+
+      document.getElementById("successMessage").classList.remove("d-none");
+      document.getElementById("ratingSection").classList.remove("d-none");
+      document.getElementById("submitPaymentBtn").classList.add("d-none");
+      document.getElementById("upiInput").disabled = true;
+      document.getElementById("backBtn").classList.remove("d-none");
+
+      if (buyAll) {
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("buyAll");
+      } else if (selectedProduct) {
+        let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+        cart = cart.filter(item => item.name !== selectedProduct.name);
+        localStorage.setItem("cartItems", JSON.stringify(cart));
+        localStorage.removeItem("selectedProduct");
+      }
+    });
+
+    // Rating and Popup
+    document.querySelectorAll('#starContainer i').forEach(star => {
+      star.addEventListener('click', () => {
+        const rating = star.dataset.value;
+        document.querySelectorAll('#starContainer i').forEach(s => s.classList.remove('selected'));
+        for (let i = 0; i < rating; i++) {
+          document.querySelectorAll('#starContainer i')[i].classList.add('selected');
+        }
+
+        // Show Thank You Popup
+        document.getElementById("thankYouPopup").classList.remove("d-none");
+
+        // Optional: send data to backend
+        const upi = document.getElementById("upiInput").value;
+        const product = selectedProduct ? selectedProduct.name : "Multiple";
+        fetch("store_payment.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `upi_id=${encodeURIComponent(upi)}&product_name=${encodeURIComponent(product)}&rating=${rating}`
+        }).then(res => res.text()).then(console.log).catch(console.error);
+      });
+    });
+
+    // Close popup
+    document.querySelector('.close-btn').addEventListener('click', () => {
+      document.getElementById("thankYouPopup").classList.add("d-none");
+    });
+  </script>
+</body>
+</html>
