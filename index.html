@@ -77,7 +77,7 @@ footer {
     <a class="navbar-brand">EcoCart</a>
     <div>
       <button class="btn btn-light me-2" id="searchToggle">🔍</button>
-      <button class="btn btn-warning" onclick="alert('Cart Page Not Included yet')">🛒 Cart</button>
+      <button class="btn btn-warning" onclick="alert('Cart Page Not Included')">🛒 Cart</button>
     </div>
   </div>
 </nav>
@@ -111,31 +111,31 @@ footer {
 
 <!-- FULL JS -->
 <script>
-// PRODUCT LIST
+// PRODUCT LIST (Unsplash – Always Loads)
 const products = [
-  { name:"Bamboo Toothbrush", rating:"high", img:"https://i.imgur.com/ew6KD5l.jpeg" },
-  { name:"Eco Bag", rating:"medium", img:"https://i.imgur.com/AZ6wJcI.jpeg" },
-  { name:"Steel Bottle", rating:"high", img:"https://i.imgur.com/T6Gx3qW.jpeg" },
-  { name:"Organic Soap", rating:"low", img:"https://i.imgur.com/iQOZ8yX.jpeg" }
+  { name: "Bamboo Toothbrush", rating: "high",
+    img: "https://images.unsplash.com/photo-1609840114035-15a6af0b7d31?auto=format&fit=crop&w=500&q=80" },
+
+  { name: "Eco Bag", rating: "medium",
+    img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?auto=format&fit=crop&w=500&q=80" },
+
+  { name: "Steel Bottle", rating: "high",
+    img: "https://images.unsplash.com/photo-1589571894960-20bbe2828d0a?auto=format&fit=crop&w=500&q=80" },
+
+  { name: "Organic Soap", rating: "low",
+    img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=500&q=80" }
 ];
 
-// LOAD PRODUCTS
+// DISPLAY PRODUCTS
 function displayProducts(list) {
   const container = document.getElementById("productContainer");
   container.innerHTML = "";
 
   list.forEach(p => {
-    const googleLink = `https://www.google.com/search?q=${encodeURIComponent(p.name)}`;
-
     container.innerHTML += `
       <div class="col-md-3 mb-4">
         <div class="product-card">
-        
-          <!-- CLICKABLE IMAGE -->
-          <a href="${googleLink}" target="_blank">
-            <img src="${p.img}" class="w-100 rounded mb-2">
-          </a>
-
+          <img src="${p.img}" class="w-100 rounded mb-2">
           <h5>${p.name}</h5>
           <span class="eco-badge eco-${p.rating}">${p.rating.toUpperCase()}</span>
         </div>
