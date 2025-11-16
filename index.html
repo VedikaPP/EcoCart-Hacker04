@@ -1,35 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Eco-Friendly Products</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>EcoCart – Sustainable Shopping Assistant</title>
+
+<!-- Bootstrap + Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+/* ---------------- NAVBAR ---------------- */
+.navbar {
+  background: #2e7d32;
+  padding: 15px;
+  color: white;
+}
+.navbar-brand {
+  color: white !important;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* ---------------- SEARCH BAR ---------------- */
+#searchBarContainer {
+  background: #e8f5e9;
+  padding: 15px;
+  display: none;
+}
+
+/* ---------------- PRODUCT CARDS ---------------- */
+.product-card {
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 15px;
+  transition: transform .3s;
+  background: white;
+}
+.product-card:hover {
+  transform: scale(1.03);
+}
+.eco-badge {
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  color: white;
+}
+.eco-high { background: #2e7d32; }
+.eco-medium { background: #ffa000; }
+.eco-low { background: #d32f2f; }
+
+/* ---------------- FOOTER ---------------- */
+footer {
+  margin-top: 40px;
+  padding: 15px;
+  text-align: center;
+  background: #2e7d32;
+  color: white;
+}
+
+/* DARK MODE */
+.dark-mode {
+  background: #121212;
+  color: white;
+}
+.dark-mode .product-card { background: #1e1e1e; color: white; }
+.dark-mode footer { background: #000; }
+.dark-mode #searchBarContainer { background: #333; }
+</style>
 </head>
+
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar">
-  <div class="navbar-content">
-    <div></div>
-    <a class="navbar-brand" href="#">Eco Cart Sustainable Assistant</a>
-    <div class="d-flex align-items-center">
+  <div class="container d-flex justify-content-between">
+    <a class="navbar-brand">EcoCart</a>
+    <div>
       <button class="btn btn-light me-2" id="searchToggle">🔍</button>
-      <button class="cart-btn" id="cartButton" onclick="window.location.href='cart.html'">🛒 Cart</button>
+      <button class="btn btn-warning" onclick="alert('Cart Page Not Included')">🛒 Cart</button>
     </div>
   </div>
 </nav>
 
-<div id="searchBarContainer" class="text-center">
-  <script async src="https://cse.google.com/cse.js?cx=9133dc39e6a794124"></script>
-  <div class="gcse-search"></div>
-  <div class="mt-3 mb-3 d-flex justify-content-center align-items-center gap-2">
-    <button class="btn btn-outline-dark" id="modeToggle"><i class="fas fa-moon"></i></button>
-    <input type="text" id="localSearchInput" class="form-control w-75" placeholder="Search products...">
+<!-- SEARCH BAR SECTION -->
+<div id="searchBarContainer">
+  <input type="text" id="localSearchInput" class="form-control w-75 mx-auto" placeholder="Search products...">
+  <div class="text-center mt-2">
+    <button class="btn btn-dark" id="modeToggle"><i class="fas fa-moon"></i></button>
   </div>
 </div>
 
-<main class="pt-5 mt-5">
+<!-- PRODUCT LIST -->
+<main class="pt-4">
   <div class="container">
     <div class="text-center">
       <select id="ecoFilter" class="form-select w-25 mx-auto mb-4">
@@ -41,14 +103,66 @@
     </div>
 
     <div class="row" id="productContainer"></div>
-    <button class="btn btn-outline-success d-block mx-auto mt-3" id="showMoreBtn">Show More</button>
   </div>
 </main>
 
-<footer>
-  EcoCart © 2025
-</footer>
+<footer>EcoCart © 2025</footer>
 
-<script src="script.js"></script>
+
+<!-- FULL JS -->
+<script>
+// PRODUCT LIST
+const products = [
+  { name:"Bamboo Toothbrush", rating:"high", img:"https://i.imgur.com/ew6KD5l.jpeg" },
+  { name:"Eco Bag", rating:"medium", img:"https://i.imgur.com/AZ6wJcI.jpeg" },
+  { name:"Steel Bottle", rating:"high", img:"https://i.imgur.com/T6Gx3qW.jpeg" },
+  { name:"Organic Soap", rating:"low", img:"https://i.imgur.com/iQOZ8yX.jpeg" }
+];
+
+// LOAD PRODUCTS
+function displayProducts(list) {
+  const container = document.getElementById("productContainer");
+  container.innerHTML = "";
+
+  list.forEach(p => {
+    container.innerHTML += `
+      <div class="col-md-3 mb-4">
+        <div class="product-card">
+          <img src="${p.img}" class="w-100 rounded mb-2">
+          <h5>${p.name}</h5>
+          <span class="eco-badge eco-${p.rating}">${p.rating.toUpperCase()}</span>
+        </div>
+      </div>
+    `;
+  });
+}
+
+displayProducts(products);
+
+// FILTER
+document.getElementById("ecoFilter").addEventListener("change", () => {
+  const value = document.getElementById("ecoFilter").value;
+  if (value === "all") displayProducts(products);
+  else displayProducts(products.filter(p => p.rating === value));
+});
+
+// SEARCH
+document.getElementById("localSearchInput").addEventListener("input", e => {
+  const text = e.target.value.toLowerCase();
+  displayProducts(products.filter(p => p.name.toLowerCase().includes(text)));
+});
+
+// SEARCH TOGGLE
+document.getElementById("searchToggle").addEventListener("click", () => {
+  const bar = document.getElementById("searchBarContainer");
+  bar.style.display = bar.style.display === "block" ? "none" : "block";
+});
+
+// DARK MODE
+document.getElementById("modeToggle").addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+});
+</script>
+
 </body>
 </html>
