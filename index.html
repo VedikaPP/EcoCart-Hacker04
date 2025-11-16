@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Eco-Friendly Products</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-content">
+    <div></div>
+    <a class="navbar-brand" href="#">Eco Cart Sustainable Assistant</a>
+    <div class="d-flex align-items-center">
+      <button class="btn btn-light me-2" id="searchToggle">🔍</button>
+      <button class="cart-btn" id="cartButton" onclick="window.location.href='cart.html'">🛒 Cart</button>
+    </div>
+  </div>
+</nav>
+
+<div id="searchBarContainer" class="text-center">
+  <script async src="https://cse.google.com/cse.js?cx=9133dc39e6a794124"></script>
+  <div class="gcse-search"></div>
+  <div class="mt-3 mb-3 d-flex justify-content-center align-items-center gap-2">
+    <button class="btn btn-outline-dark" id="modeToggle"><i class="fas fa-moon"></i></button>
+    <input type="text" id="localSearchInput" class="form-control w-75" placeholder="Search products...">
+  </div>
+</div>
+
+<main class="pt-5 mt-5">
+  <div class="container">
+    <div class="text-center">
+      <select id="ecoFilter" class="form-select w-25 mx-auto mb-4">
+        <option value="all">All Eco Ratings</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+    </div>
+
+    <div class="row" id="productContainer"></div>
+    <button class="btn btn-outline-success d-block mx-auto mt-3" id="showMoreBtn">Show More</button>
+  </div>
+</main>
+
+<footer>
+  EcoCart © 2025
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
