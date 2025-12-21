@@ -15,7 +15,16 @@ if ($result->num_rows === 1) {
     if (password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['name'] = $user['name'];
-        header("Location: dashboard.php");
+
+        // Log successful login
+        $log_stmt = $conn->prepare("INSERT INTO login_logs (user_id) VALUES (?)");
+        $log_stmt->bind_param("i", $user['id']);
+        $log_stmt->execute();
+        $log_stmt->close();
+
+        // Redirect with success message
+        header("Location: dashboard.php?login=success");
+        exit();
     } else {
         echo "Incorrect password.";
     }
