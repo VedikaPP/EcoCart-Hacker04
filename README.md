@@ -3,9 +3,6 @@
 EcoCart is a web-based application developed by **Team Hacker4** for a hackathon project.  
 The application helps users make **environmentally responsible shopping decisions** by rating products based on their **eco-friendliness, materials, and brand ethics**, while also suggesting **greener alternatives**.
 
-🔗 **Live Demo:**  
-👉 https://cloudproject-isgh.onrender.com/prabal.html
-
 ---
 
 ## 👨‍💻 Team Name
